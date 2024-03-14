@@ -19,7 +19,7 @@ from django.urls import include,path,re_path
 from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-   # re_path('login',views.login),
-   # re_path('test_token',views.test_token),
+   path('login',views.login),
+   path('test_token',views.test_token),
     path('',include('students.urls')),
 ]
