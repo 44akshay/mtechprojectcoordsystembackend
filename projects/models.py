@@ -42,6 +42,11 @@ class Phase(models.Model):
     Evaluation_Comments = models.CharField(default="", max_length=1000, blank=True)
     Report_Comments = models.CharField(default="", max_length=100, blank=True)
 
+class Domain(models.Model):
+    domain_name = models.CharField(max_length=200)
+    def __str__(self):
+        return str(self.domain_name)
+
 class Project(models.Model):
     rollNoId = models.CharField(max_length=9, unique=True)
     projectname = models.CharField(default="Default", max_length=50)
@@ -52,7 +57,7 @@ class Project(models.Model):
     student = models.OneToOneField(Student, on_delete=models.SET_NULL, null=True,blank=True)
     chair_person = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True,blank=True, related_name='chair_projects')
     committee_members = models.ManyToManyField(Faculty, related_name='member_of',blank=True)
-
+    domain_categories = models.ManyToManyField(Domain,related_name='Domain',blank=True)
     def __str__(self):
         return f"{self.projectname}"
 

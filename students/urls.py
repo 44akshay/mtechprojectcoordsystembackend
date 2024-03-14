@@ -2,5 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('students/',views.get_student_project_info,name='students')
+    path('upload',views.upload_file,name='upload_file'),
+    path('projectdetails',views.post_project_name,name='post_proj'),
+
+
+    path('',views.get_student_project_info,name='students')
+
 ]
