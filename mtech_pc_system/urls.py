@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
    path('login',views.login),
    path('test_token',views.test_token),
-    path('',include('students.urls')),
+    path('students/',include('students.urls')),
 ]
