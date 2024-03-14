@@ -32,25 +32,8 @@ def get_student_project_info(request):
     if project.guide:
         if project.projectname != "Default":
             serializer = ProjectSerializer(instance=project)
-            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":"False"},status=200)
+            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":"True"},status=200)
         else:
-            return Response({"isGuideSelected":"True","isProjectUploaded":'False'}, status=400)
-
-        #json_object['isGuideSelected'] = 'True'
-        #return JsonResponse(json.dumps(json_object),safe=False, status=200)
-        # If project_name is not empty, send project details
-    #     if student.project_name:
-    #         project_details = {
-    #             'project_name': student.project_name,
-    #             'semester': student.semester,
-    #             'program': student.program,
-    #             # Add more project details if needed
-    #         }
-    #         return JsonResponse(project_details)
-    #     else:
-    #         # If project_name is empty, send response to show a form in the frontend
-    #         return JsonResponse({'message': 'Please fill in the project name'}, status=400)
+            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":'False'}, status=400)
     else:
-        # If isGuideSelected is False, send a response to prompt the frontend to select a guide
-        #json_object['isGuideSelected']= 'False'
         return Response({"isGuideSelected":"False"}, status=400)
