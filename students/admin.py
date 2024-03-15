@@ -3,6 +3,9 @@ from import_export.admin import ImportMixin
 from django.contrib import admin
 from .models import Student
 from django.contrib.auth.models import User
+from projects.models import Project
+
+
 
 class StudentResource(resources.ModelResource):
     class Meta:
