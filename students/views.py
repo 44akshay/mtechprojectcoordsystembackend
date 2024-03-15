@@ -14,9 +14,14 @@ from django.contrib.auth.models import User
 from mtech_pc_system.serializers import ProjectSerializer
 import json
 
-def students(request):
+# import faculty.models import Faculty
 
+
+def students(request):
     return HttpResponse("Hello World!!!")
+
+
+
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication,TokenAuthentication])
@@ -35,7 +40,7 @@ def get_student_project_info(request):
             return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":"True"},status=200)
         else:
             serializer = ProjectSerializer(instance=project)
-            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":'False'}, status=300)
+            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":'False'}, status=200)
     else:
         return Response({"isGuideSelected":"False"}, status=200)
 
@@ -51,23 +56,6 @@ def post_project_name(request):
     # Check if isGuideSelected is True
     # domain = Domain.object.
     data = json.loads(request.body)
-
-        # Access the 'domains' attribute from the JSON object
-    # domain_array = data.get('domains', [])
-    # project.projectname = data.get('projectname')
-    # project.save(update_fields=['projectname'])
-
-    # for i in domain_array:
-    #     domain_temp = Domain.objects.filter(domain_name=i)
-    #     print("hi")
-    #     if(not domain_temp):
-    #         print("hello")
-    #         domain_temp = Domain(domain_name =i)
-    #         domain_temp.save()
-    #     print("u")
-    #     project.domain_categories.add(domain_temp)
-    #     print("where")
-    #project.save(update_fields=['domain','projectname'])
     domain_array = data.get('domains', [])
     projectname = data.get('projectname')
 
@@ -84,7 +72,7 @@ def post_project_name(request):
     # print(project1.domain_categories.all())
     return JsonResponse({'Success':'200'},status=200)
 
-    
+
 StatusChoices = (
         (0, 'Pending'),
         (1, 'Rejected'),
@@ -112,7 +100,7 @@ def upload_file(request):
     if phase == "1":
         phase1 = project.Phase1
         phase1.Report = file
-        phase1.Status = StatusChoices[3]
+        phase1.Status = StatusChoices[3][1]
 
         phase1.save(update_fields= ['Report','Status'])
         project.save(update_fields= ['Phase1'])
@@ -120,18 +108,21 @@ def upload_file(request):
     elif phase == "2":
         phase2 = project.Phase2
         phase2.Report = file
-        phase2.Status = StatusChoices[3]
+        phase2.Status = StatusChoices[3][1]
         phase2.save(update_fields= ['Report','Status'])
         project.save(update_fields= ['Phase2'])
     elif phase == "3":
         phase3 = project.Phase3
         phase3.Report = file
-        phase3.Status = StatusChoices[3]
+        phase3.Status = StatusChoices[3][1]
 
         phase3.save(update_fields= ['Report','Status'])
 
         project.save(update_fields= ['Phase3'])
 
+    project = Project.objects.get(student=student_user)
+
+    print(project.Phase1.Status)
     return JsonResponse({'file_name': file.name},status=200)
 
 

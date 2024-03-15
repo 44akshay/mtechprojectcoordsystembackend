@@ -2,6 +2,12 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from projects.models import Project,Phase
 from faculty.models import Faculty
+from students.models import Student
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['firstname','email']
 
 class FacultySerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,10 +30,16 @@ class ProjectSerializer(serializers.ModelSerializer):
     Phase3 = PhaseSerializer()
     guide = FacultySerializer()
     chair_person = FacultySerializer()
-    committee_members = FacultySerializer()
+    committee_members = FacultySerializer(many=True)
     class Meta:
         model = Project
         fields = ['rollNoId', 'projectname', 'Phase1', 'Phase2', 'Phase3', 'guide', 'student', 'chair_person', 'committee_members']
+
+class getRollNoSerializer(serializers.ModelSerializer):
+    student = StudentSerializer()
+    class Meta:
+        model = Project
+        fields = ['rollNoId','student']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta(object):
