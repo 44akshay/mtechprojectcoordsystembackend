@@ -29,3 +29,4 @@ def my_handler(sender,created,instance, **kwargs):
             new_user = User.objects.get(email=instance.email)
             instance.user = new_user
             instance.save(update_fields=['user'])
+        

@@ -89,4 +89,13 @@ def my_handler(sender,created,instance, **kwargs):
 
         
 
+class Limits(models.Model):
+    Limit = models.CharField(max_length=10,default="Limit")
+    GuideLimit = models.IntegerField(default=2)
+    ChairPerson = models.IntegerField(default=5)
+    CommitteeLimit = models.IntegerField(default=5)
+
+    def __str__(self):
+        return f"Limits"
+
         

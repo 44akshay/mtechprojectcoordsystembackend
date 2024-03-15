@@ -9,3 +9,5 @@ def addfaculty(request):
      facobj=faculty(name="ABC",dept="CSE", isguide=1,ischair=2 , iscommem=3,isprojcoo=1,email = "abc@gmail.com",domain="CV")
      facobj.save()
      return render(request,'home.html',{'facobj':facobj})
+
+
