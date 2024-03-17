@@ -133,5 +133,40 @@ def upload_file(request):
     return JsonResponse({'file_name': file.name},status=200)
 
 
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def comminfo(request):
+    print(request.user.username)
+    stud=Student.objects.get(email=request.user.username)
+    proj=Project.objects.get(student=stud)
+    if proj.guide is not None:
+        guideName=proj.guide.name
+        print(proj.guide.name)
+    else:
+        guideName="Not Allocated"
+    if proj.chair_person is not None:
+        chairperson=proj.chair_person.name
+        print(proj.chair_person.name)
+    else:
+        chairperson="Not Allocated"
+    committeeMember1="Not Allocated"
+    committeeMember2="Not Allocated"
+    j=0
+    for i in proj.committee_members.all():
+        if(j==0):
+            committeeMember1=i.name
+            j+=1
+        elif(j==1):
+            committeeMember2=i.name
+    response_data = {
+    "guideName": guideName,
+    "chairperson": chairperson,
+    "committeeMember1": committeeMember1,
+    "committeeMember2": committeeMember2,
+    }
+    json_response = json.dumps(response_data)
+    print(json_response)
+    return JsonResponse(response_data)
 
 
