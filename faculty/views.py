@@ -4,7 +4,6 @@ from django.conf import settings
 
 from django.http import HttpResponse
 from django.contrib import messages
-#from .forms import ExcelUploadForm
 from .models import *
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
@@ -25,7 +24,6 @@ from mtech_pc_system.serializers import StudentSerializer
 
 
 def addfaculty(request):
-     #Creating a faculty object
 
      facobj=Faculty(name="prof5",dept="CSE", isguide=1,ischair=0 , iscommem=0,isprojcoo=1,email = "dbmsproject019@gmail.com",domain="CV")
      facobj.save()
@@ -50,7 +48,7 @@ def viewfacs(request):
 @permission_classes([IsAuthenticated])
 def getAllStudents(request):
 
-    student_objects = Student.objects.all()
+    student_objects = Student.objects.filter(isGuideSelected=False)
     student_serializer = StudentSerializer(student_objects, many=True)
     student_data = student_serializer.data
     return Response({'students': student_data})
@@ -63,18 +61,26 @@ def getAllStudents(request):
 @permission_classes([IsAuthenticated])
 def addmystudent(request):
     if request.method == "POST":
+          limit_object = Limits.objects.get(Limit="Limit")
           print("Test")
           print(request.user.username)
           user = User.objects.get(username = request.user.username)
           #faculty_instance = Faculty.objects.get(email="pg1@nitc.ac.in")
           faculty_instance = Faculty.objects.get(email=request.user.username)
+          if faculty_instance.isguide == limit_object.GuideLimit:
+               return Response({'message':'Limit Exceeded'},status=200)
+
+          faculty_instance.isguide = faculty_instance.isguide+1
+          faculty_instance.save(['isguide'])
           json_data = json.loads(request.body.decode('utf-8'))
           rollno = json_data.get("rollno")  # Retrieve rollno from JSON data
           sugch=json_data.get("sugchair")
           sugmem1=json_data.get("sugmem1")
           sugmem2=json_data.get("sugmem2")
           print("Rollno received is :", rollno)
-          
+          student = Student.objects.get(rollNoId=rollno)
+          student.isGuideSelected=True
+          student.save(update_fields=['isGuideSelected',])
           student_instance=Project.objects.get(rollNoId=rollno)
           student_instance.guide=faculty_instance
           student_instance.sugg_chair=sugch
@@ -83,6 +89,21 @@ def addmystudent(request):
           print("guide::",student_instance.guide.name)
           student_instance.save(update_fields=['guide','sugg_chair','sugg_mem1','sugg_mem2'])
     return Response({'message':'succes'},status=200)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication,TokenAuthentication])

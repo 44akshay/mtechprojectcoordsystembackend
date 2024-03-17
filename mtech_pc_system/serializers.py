@@ -7,7 +7,7 @@ from students.models import Student
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['firstname','email']
+        fields = ['firstname','email','rollNoId']
 
 class LimitSerializer(serializers.ModelSerializer):
     class Meta:
