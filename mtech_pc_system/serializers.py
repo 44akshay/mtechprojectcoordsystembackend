@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from projects.models import Project,Phase
+from projects.models import Project,Phase,Domain,Limits
 from faculty.models import Faculty
 from students.models import Student
 
@@ -8,6 +8,19 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['firstname','email']
+
+class LimitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Limits
+        fields = [ 'GuideLimit', 
+    'ChairPerson',
+    'CommitteeLimit',
+    'Phase1_start',
+    'Phase2_start' ,
+    'Phase3_start' ,
+    'Phase1_end' ,
+    'Phase2_end',
+    'Phase3_end']
 
 class FacultySerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,6 +32,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id','username','email',]
 
+class DomainSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Domain
+        fields=['domain_name']
 class PhaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Phase
