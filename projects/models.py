@@ -3,6 +3,7 @@ from faculty.models import Faculty
 from students.models import Student
 from django.db.models.signals import pre_save,post_save
 from django.dispatch import receiver
+from datetime import date
 # Create your models here.
 
 # class Project(models.Model):
@@ -58,6 +59,10 @@ class Project(models.Model):
     chair_person = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True,blank=True, related_name='chair_projects')
     committee_members = models.ManyToManyField(Faculty, related_name='member_of',blank=True)
     domain_categories = models.ManyToManyField(Domain,related_name='Domain',blank=True)
+    sugg_chair=models.CharField(max_length=30,null=True,blank=True)
+    sugg_mem1=models.CharField(max_length=30,null=True,blank=True)
+    sugg_mem2=models.CharField(max_length=30,null=True,blank=True)
+
     def __str__(self):
         return f"{self.projectname}"
 
@@ -94,8 +99,20 @@ class Limits(models.Model):
     GuideLimit = models.IntegerField(default=2)
     ChairPerson = models.IntegerField(default=5)
     CommitteeLimit = models.IntegerField(default=5)
+    Phase1_start = models.DateField(default = date.today)
+    Phase2_start = models.DateField(default = date.today)
+    Phase3_start = models.DateField(default = date.today)
+    Phase1_end = models.DateField(default = date.today)
+    Phase2_end= models.DateField(default = date.today)
+    Phase3_end = models.DateField(default = date.today)
 
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     if not self.pk:  # Check if the object is being created
+    #         # Create the default object here
+    #         Limits.objects.create()
     def __str__(self):
-        return f"Limits"
+        return f"{self.Limit}"
 
         

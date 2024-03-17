@@ -8,10 +8,10 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.authentication import SessionAuthentication,TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from projects.models import Project,Domain
+from projects.models import Project,Domain,Limits
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from mtech_pc_system.serializers import ProjectSerializer
+from mtech_pc_system.serializers import ProjectSerializer,DomainSerializer,LimitSerializer
 import json
 
 # import faculty.models import Faculty
@@ -32,15 +32,22 @@ def get_student_project_info(request):
     student_user = get_object_or_404(Student,email = request.user.email)
     project = Project.objects.get(student=student_user)
     # Check if isGuideSelected is True
-    print(project.guide)
+    domain_objects= Domain.objects.all()
+    domain_serializer = DomainSerializer(domain_objects, many=True)
+    domain_serializer_data = domain_serializer.data
+    #print(project.guide)
+    limit_object = Limits.objects.get(Limit="Limit")
+    limit_serializer = LimitSerializer(limit_object)
+    limit_serializer_data = limit_serializer.data
+
     
     if project.guide:
         if project.projectname != "Default":
             serializer = ProjectSerializer(instance=project)
-            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":"True"},status=200)
+            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":"True","limit":limit_serializer_data},status=200)
         else:
             serializer = ProjectSerializer(instance=project)
-            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":'False'}, status=200)
+            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":'False',"domain":domain_serializer_data}, status=200)
     else:
         return Response({"isGuideSelected":"False"}, status=200)
 
