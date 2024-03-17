@@ -27,6 +27,9 @@ urlpatterns = [
     path('projects/',include('projects.urls')),
     path('faculty/',include('faculty.urls')),
     path('coordinator/',include('coordinator.urls')),
+    path('chairperson/',include('chairperson.urls')),
+
+
 
 
 
