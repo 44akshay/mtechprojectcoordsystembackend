@@ -20,8 +20,12 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
    path('login',views.login),
+    path('limit',views.getLimits),
+
    path('test_token',views.test_token),
     path('students/',include('students.urls')),
     path('projects/',include('projects.urls')),
+    path('faculty/',include('faculty.urls')),
+
 
 ]
