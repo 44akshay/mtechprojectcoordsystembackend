@@ -26,7 +26,8 @@ urlpatterns = [
     path('students/',include('students.urls')),
     path('projects/',include('projects.urls')),
     path('faculty/',include('faculty.urls')),
-#    path('viewstuds/',views.getStudents,name='sendmailto'),
+    path('coordinator/',include('coordinator.urls')),
+
 
 
 
