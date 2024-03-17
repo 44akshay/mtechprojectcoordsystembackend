@@ -21,6 +21,7 @@ import re
 from .serializers import *
 import smtplib
 from django.core.mail import send_mail
+from mtech_pc_system.serializers import StudentSerializer
 
 
 def addfaculty(request):
@@ -44,6 +45,17 @@ def viewfacs(request):
     faculty_json = faculty_serializer.data
     return Response({'faculty': faculty_json})
     # return Response({"facultynames":facobj})
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getAllStudents(request):
+
+    student_objects = Student.objects.all()
+    student_serializer = StudentSerializer(student_objects, many=True)
+    student_data = student_serializer.data
+    return Response({'students': student_data})
+    # return Response({"facultynames":facobj})
+
 
 
 @api_view(['POST'])
@@ -120,5 +132,5 @@ def sendmailto(request):
      print(a)
      from_email = settings.EMAIL_HOST_USER
      send_mail(SUBJECT, fullmsg, from_email,a )
-     return Response({'message':'succes'},status=200)
+     return Response({'message':'success'},status=200)
 

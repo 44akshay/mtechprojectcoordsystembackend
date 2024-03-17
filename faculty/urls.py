@@ -7,5 +7,6 @@ urlpatterns = [
     path('viewfacs/',views.viewfacs,name='viewfacs'),
         path('sendmailto/',views.sendmailto,name='sendmailto'),
 
+    path('viewAllStud/',views.getAllStudents,name='sendmailto'),
 
 ]
