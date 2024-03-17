@@ -105,6 +105,10 @@ class Limits(models.Model):
     Phase1_end = models.DateField(default = date.today)
     Phase2_end= models.DateField(default = date.today)
     Phase3_end = models.DateField(default = date.today)
+    Phase1_Max_Marks = models.IntegerField(default=20)
+    Phase2_Max_Marks = models.IntegerField(default=40)
+    Phase3_Max_Marks = models.IntegerField(default=40)
+
 
 
     # def __init__(self, *args, **kwargs):
