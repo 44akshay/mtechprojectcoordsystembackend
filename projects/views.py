@@ -11,10 +11,10 @@ from django.http import JsonResponse,FileResponse
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.authentication import SessionAuthentication,TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from projects.models import Project,Domain
+from projects.models import Project,Domain,Limits
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from mtech_pc_system.serializers import ProjectSerializer,getRollNoSerializer
+from mtech_pc_system.serializers import ProjectSerializer,getRollNoSerializer,LimitSerializer
 import json
 
 # Create your views here.
@@ -58,8 +58,10 @@ def project_details(request):
     # project.Phase3.Report = True
     # if not report_file:
     #     serializer.data.Phase3.Report = False
-
-    return Response({"projectdata":serializer.data},status=200)
+    limit_object = Limits.objects.get(Limit="Limit")
+    limit_serializer = LimitSerializer(limit_object)
+    limit_serializer_data = limit_serializer.data
+    return Response({"projectdata":serializer.data,"limit":limit_serializer_data},status=200)
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication,TokenAuthentication])
