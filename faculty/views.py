@@ -71,7 +71,7 @@ def addmystudent(request):
                return Response({'message':'Limit Exceeded'},status=200)
 
           faculty_instance.isguide = faculty_instance.isguide+1
-          faculty_instance.save(['isguide'])
+          faculty_instance.save(update_fields=['isguide'])
           json_data = json.loads(request.body.decode('utf-8'))
           rollno = json_data.get("rollno")  # Retrieve rollno from JSON data
           sugch=json_data.get("sugchair")
@@ -103,8 +103,6 @@ def addmystudent(request):
 
 
 
-
-
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication,TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -118,31 +116,44 @@ def sendmailto(request):
      json_data = json.loads(request.body.decode('utf-8'))
      SUBJECT = "Mtech Project Coordination"
      rollno=json_data.get("rollno")
+     print( rollno)
      date=json_data.get("date")
+     print(date)
      time=json_data.get("time")
-     loc=json_data.get("loc")
-     desc=json_data.get("desc")
-     invite=json_data.get("invite")
+     print(time)
+     loc=json_data.get("location")
+     print(loc)
+     desc=json_data.get("description")
+     print(desc)
+     invite=json_data.get("inviteText")
+     print(invite)
      fullmsg+="Roll No: "+rollno+"\n"+"Date: "+date+"\n"+"Time: "+time+"\n"+"Location: "+loc+"\n"+"Description: "+desc+"\n"+"Invite: "+invite+"\n"
      print(fullmsg)
      message = 'Subject: {}\n\n{}'.format(SUBJECT,fullmsg )
      print("rec")
      a=[]
      a.append(request.user.username)
+     print(a)
+     
+     rec=Project.objects.get(rollNoId =rollno).chair_person
+     if(rec is not None):
+          w=Project.objects.get(rollNoId =rollno).chair_person.email
+          a.append(w)
 
-     rec=Project.objects.get(rollNoId =rollno).chair_person.email
-     a.append(rec)
-     print(rec)
+          
      #s = smtplib.SMTP('smtp.gmail.com', 587)
 # start TLS for security
     # s.starttls()
      #s.login("dbmsproject019@gmail.com", "cfsf ctnp lnpp wmjg")
 
      #s.sendmail("dbmsproject019@gmail.com", "dbmsproject019@gmail.com", message)
-
-     for i in Project.objects.get(rollNoId =rollno).committee_members.all():
-          print(i.email)
-          a.append(i.email)
+     t=Project.objects.get(rollNoId =rollno).committee_members.all()
+     if(t is not None):
+          for i in Project.objects.get(rollNoId =rollno).committee_members.all():
+              print(i.email)
+              a.append(i.email)
+          
+     
     # b=Project.objects.get(rollNoId =rollno)
      
      #i=b.committee_members.all()
@@ -153,5 +164,4 @@ def sendmailto(request):
      print(a)
      from_email = settings.EMAIL_HOST_USER
      send_mail(SUBJECT, fullmsg, from_email,a )
-     return Response({'message':'success'},status=200)
-
+     return Response({'message':'succes'},status=200)
