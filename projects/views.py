@@ -6,8 +6,8 @@ from django.http import HttpResponse
 from django.contrib import messages
 from .models import Student
 from faculty.models import Faculty
-
-from django.http import JsonResponse
+import os
+from django.http import JsonResponse,FileResponse
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.authentication import SessionAuthentication,TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
