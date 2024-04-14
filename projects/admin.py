@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Project, Limits,Domain
+from .models import Project, Limits,Domain,Phase
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -16,7 +16,12 @@ class LimitsAdmin(admin.ModelAdmin):
 class DomainAdmin(admin.ModelAdmin):
     pass
 
+class PhaseAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(Project,ProjectAdmin)
 admin.site.register(Limits,LimitsAdmin)
 admin.site.register(Domain,DomainAdmin)
+admin.site.register(Phase,PhaseAdmin)
+
 

@@ -36,6 +36,7 @@ def get_student_project_info(request):
     domain_serializer = DomainSerializer(domain_objects, many=True)
     domain_serializer_data = domain_serializer.data
     #print(project.guide)
+    print(domain_serializer_data)
     limit_object = Limits.objects.get(Limit="Limit")
     limit_serializer = LimitSerializer(limit_object)
     limit_serializer_data = limit_serializer.data
@@ -44,7 +45,7 @@ def get_student_project_info(request):
     if project.guide:
         if project.projectname != "Default":
             serializer = ProjectSerializer(instance=project)
-            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":"True","limit":limit_serializer_data},status=200)
+            return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":"True","domain":domain_serializer_data,"limit":limit_serializer_data},status=200)
         else:
             serializer = ProjectSerializer(instance=project)
             return Response({"project":serializer.data,"isGuideSelected":"True","isProjectUploaded":'False',"domain":domain_serializer_data}, status=200)
@@ -110,6 +111,7 @@ def upload_file(request):
         phase1.Status = StatusChoices[3][1]
 
         phase1.save(update_fields= ['Report','Status'])
+        
         project.save(update_fields= ['Phase1'])
        # project.Phase1.Report =  file
     elif phase == "2":
@@ -133,11 +135,10 @@ def upload_file(request):
     return JsonResponse({'file_name': file.name},status=200)
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 @authentication_classes([SessionAuthentication,TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def comminfo(request):
-    print(request.user.username)
     stud=Student.objects.get(email=request.user.username)
     proj=Project.objects.get(student=stud)
     if proj.guide is not None:
